@@ -74,8 +74,7 @@ const App = () => {
 			[shuffledAnimals[i], shuffledAnimals[j]] = [shuffledAnimals[j], shuffledAnimals[i]];
 		}
 		setAnimals(shuffledAnimals);
-		setIsFlipped(false);
-	}, [isFlipped]);
+	}, [clickedCards]);
 
 	const handleCardClick = (animal) => {
 		if (clickedCards.includes(animal)) {
@@ -87,10 +86,12 @@ const App = () => {
 			setGameStatus('won');
 			return;
 		}
-		// Flip card and update clicked cards
-		setIsFlipped(!isFlipped);
+		setIsFlipped(true);
 		setClickedCards((prevClickedCards) => [...prevClickedCards, animal]);
 		setScore(score + 1);
+		setTimeout(() => {
+			setIsFlipped(false);
+		}, 1000);
 	};
 
 	function resetGame() {

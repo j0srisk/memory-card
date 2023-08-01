@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 const Card = ({ animal, gameStatus, isFlipped, onCardClick }) => {
 	const handleClick = () => {
 		if (gameStatus == 'playing') {
@@ -9,43 +7,57 @@ const Card = ({ animal, gameStatus, isFlipped, onCardClick }) => {
 		return;
 	};
 
+	const handleButtonClick = (e) => {
+		e.stopPropagation();
+		const animalUrl = e.currentTarget.getAttribute('data-animal-url');
+		console.log(animalUrl);
+		window.open(animalUrl, '_blank');
+	};
+
 	return (
-		<div
-			onClick={handleClick}
-			className="group relative overflow-hidden transition-all ease-in-out hover:scale-105"
-		>
+		<div className="card relative transition-all ease-in-out hover:scale-105">
+			{/* Card Front */}
 			<div
-				style={{
-					backgroundImage: `url(${animal.photos[0].full})`,
-				}}
-				className="flex h-full w-full flex-col justify-end rounded-xl bg-cover bg-center p-4 text-center"
+				className={`card-front group relative h-full w-full overflow-hidden ${
+					isFlipped ? 'hidden' : 'flex'
+				}`}
+				onClick={handleClick}
 			>
-				<div className="z-10 flex select-none flex-col items-center text-white">
-					<p className="text-2xl font-bold capitalize">{animal.name}</p>
-					<p className="text-sm capitalize">
-						{animal.contact.address.city}, {animal.contact.address.state}
-					</p>
-				</div>
-			</div>
-			<button
-				onClick={() => window.open(animal.url, '_blank')}
-				className="absolute right-4 top-4 z-10 hidden group-hover:block"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 24 24"
-					strokeWidth={1.5}
-					className="h-6 w-6 fill-none stroke-white"
+				<div
+					style={{
+						backgroundImage: `url(${animal.photos[0].full})`,
+					}}
+					className="flex h-full w-full flex-col justify-end rounded-xl bg-cover bg-center p-4 text-center"
 				>
-					<path
-						strokeLinecap="round"
-						strokeLinejoin="round"
-						d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
-					/>
-				</svg>
-			</button>
-			{/* Gradient Overlay */}
-			<div className="pointer-events-none absolute left-0 top-0 h-full w-full rounded-xl border-4 border-white  bg-gradient-to-b from-transparent to-black"></div>
+					<div className="z-10 flex select-none flex-col items-center text-white">
+						<p className="text-2xl font-bold capitalize">{animal.name}</p>
+						<p className="text-sm capitalize">
+							{animal.contact.address.city}, {animal.contact.address.state}
+						</p>
+					</div>
+				</div>
+				<button
+					data-animal-url={animal.url}
+					onClick={handleButtonClick}
+					className="absolute right-4 top-4 z-10 hidden group-hover:block"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						strokeWidth={1.5}
+						className="h-6 w-6 fill-none stroke-white"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
+						/>
+					</svg>
+				</button>
+				{/* Gradient Overlay */}
+				<div className="pointer-events-none absolute left-0 top-0 flex h-full w-full rounded-xl border-4 border-white  bg-gradient-to-b from-transparent to-black"></div>
+			</div>
+			{/* Card Back */}
 			<div
 				className={`pointer-events-none absolute left-0 top-0 z-20 ${
 					isFlipped ? 'flex' : 'hidden'
