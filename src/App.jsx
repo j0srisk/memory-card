@@ -19,7 +19,7 @@ const App = () => {
 				const sort = 'random';
 				const limit = 20;
 
-				const cards = 8;
+				const cards = 6;
 
 				const maxRetries = 3;
 				let retries = 0;
@@ -77,8 +77,8 @@ const App = () => {
 		setIsFlipped(false);
 	}, [isFlipped]);
 
-	const handleCardClick = (key) => {
-		if (clickedCards.includes(key)) {
+	const handleCardClick = (animal) => {
+		if (clickedCards.includes(animal)) {
 			// Game over
 			setGameStatus('lost');
 			return;
@@ -89,7 +89,7 @@ const App = () => {
 		}
 		// Flip card and update clicked cards
 		setIsFlipped(!isFlipped);
-		setClickedCards((prevClickedCards) => [...prevClickedCards, key]);
+		setClickedCards((prevClickedCards) => [...prevClickedCards, animal]);
 		setScore(score + 1);
 	};
 
@@ -100,36 +100,60 @@ const App = () => {
 	}
 
 	return (
-		<div className="flex h-screen flex-col items-center justify-center p-6">
-			<h1 className="mb-8 text-4xl font-bold text-white">Petfinder Memory Game</h1>
-			{gameStatus === 'won' && (
-				<h2 className="mb-8 text-2xl font-bold text-white">Game Over! You Win!</h2>
-			)}
-			{gameStatus === 'lost' && (
-				<h2 className="mb-8 text-2xl font-bold text-white">
-					Game Over! You lost! Final Score: {score}
-				</h2>
-			)}
-			{gameStatus === 'playing' && (
-				<h2 className="mb-8 text-2xl font-bold text-white">Current Score: {score}</h2>
-			)}
-			<select
-				id="type"
-				name="type"
-				value={animalType} // Set the value of select to the animalType state
-				onChange={(e) => setAnimalType(e.target.value)} // Update the animalType state on change
-				className="mb-8 rounded-lg bg-white text-black"
-			>
-				<option value="dog">Dogs</option>
-				<option value="cat">Cats</option>
-				<option value="rabbit">Rabbits</option>
-				<option value="small-furry">Small & Furry</option>
-				<option value="horse">Horses</option>
-				<option value="bird">Birds</option>
-				<option value="scales-fins-other">Scales, Fins & Other</option>
-				<option value="barnyard">Barnyard</option>
-			</select>
-			<div className="grid h-[75vh] w-[1000px] grid-flow-row grid-cols-4 grid-rows-2 gap-8">
+		<div className="flex h-screen flex-col items-center justify-between p-6">
+			<div className="flex w-full max-w-screen-xl flex-col ">
+				<div className="flex w-full justify-between">
+					<div className="">
+						<h1 className="text-4xl font-bold text-white">Petfinder Memory Game</h1>
+					</div>
+					<div className="relative inline-block w-48">
+						<select
+							id="type"
+							name="type"
+							value={animalType} // Set the value of select to the animalType state
+							onChange={(e) => setAnimalType(e.target.value)} // Update the animalType state on change
+							className="block w-full appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2 font-bold focus:border-indigo-500 focus:outline-none"
+						>
+							<option value="dog">Dogs</option>
+							<option value="cat">Cats</option>
+							<option value="rabbit">Rabbits</option>
+							<option value="small-furry">Small & Furry</option>
+							<option value="horse">Horses</option>
+							<option value="bird">Birds</option>
+							<option value="scales-fins-other">Scales, Fins & Other</option>
+							<option value="barnyard">Barnyard</option>
+						</select>
+						<div className="pointer-events-none absolute inset-y-0 right-0 flex h-full items-center px-2">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 24 24"
+								strokeWidth={1.5}
+								className="h-4 w-4 stroke-current"
+							>
+								<path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+							</svg>
+						</div>
+					</div>
+				</div>
+
+				<div className="w-full justify-start">
+					{gameStatus === 'won' && <h2 className="mb-8 text-lg text-white">Game Over! You Win!</h2>}
+					{gameStatus === 'lost' && (
+						<h2 className="mb-8 text-lg text-white">
+							Game Over! You already selected that card. Final Score: {score}
+						</h2>
+					)}
+					{gameStatus === 'playing' && score > 0 && (
+						<h2 className="mb-8 text-lg text-white">Current Score: {score}</h2>
+					)}
+					{gameStatus === 'playing' && score === 0 && (
+						<h2 className="mb-8 text-lg text-white">
+							Click a card to start and earn points, but don&apos;t click on any more than once!
+						</h2>
+					)}
+				</div>
+			</div>
+			<div className="grid h-full w-full max-w-screen-xl grid-flow-row grid-cols-3 grid-rows-2 gap-8">
 				{animals.map((animal) => (
 					<Card
 						key={animal.id}
@@ -137,7 +161,7 @@ const App = () => {
 						gameStatus={gameStatus}
 						isFlipped={isFlipped}
 						setIsFlipped={setIsFlipped}
-						onCardClick={() => handleCardClick(animal.id)}
+						onCardClick={() => handleCardClick(animal)}
 					/>
 				))}
 			</div>
