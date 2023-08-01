@@ -23,10 +23,10 @@ exports.handler = async function (event, context) {
 	const API_URL = 'https://api.petfinder.com/v2/animals';
 	const API_TOKEN = `${process.env.VITE_CLIENT_TOKEN}`;
 
-	const { type, location } = event.queryStringParameters;
+	const { type, sort, limit } = event.queryStringParameters;
 
 	try {
-		const response = await axios.get(`${API_URL}?type=${type}&location=${location}`, {
+		const response = await axios.get(`${API_URL}?type=${type}&sort=${sort}&limit=${limit}`, {
 			headers: {
 				Authorization: `Bearer ${API_TOKEN}`,
 			},
