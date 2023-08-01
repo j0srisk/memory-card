@@ -28,7 +28,9 @@ const App = () => {
 				// Fetch data from API until we have enough animals
 				while (fetchedAnimals.length < 8 && retries < maxRetries) {
 					const response = await axios.get(
-						`http://localhost:8888/.netlify/functions/getPetfinderAnimals?type=${type}&sort=${sort}&limit=${limit}`,
+						`${
+							import.meta.env.VITE_BASE_URL
+						}/.netlify/functions/getPetfinderAnimals?type=${type}&sort=${sort}&limit=${limit}`,
 					);
 
 					const filteredAnimals = response.data.animals.filter(
