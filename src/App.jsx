@@ -1,9 +1,148 @@
-function App() {
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+import Card from './components/Card';
+
+const App = () => {
+	const [animals, setAnimals] = useState([]);
+	const [isFlipped, setIsFlipped] = useState(false);
+	const [clickedCards, setClickedCards] = useState([]);
+	const [score, setScore] = useState(0);
+	const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'won', 'lost'
+	const [animalType, setAnimalType] = useState('dog'); // 'dog', 'cat', 'rabbit', 'small-furry', 'horse', 'bird', 'scales-fins-other', 'barnyard'
+
+	useEffect(() => {
+		// Function to fetch data from your API
+		const fetchAnimals = async () => {
+			try {
+				const type = animalType;
+				const sort = 'random';
+				const limit = 20;
+
+				const cards = 8;
+
+				const maxRetries = 3;
+				let retries = 0;
+				let fetchedAnimals = [];
+
+				// Fetch data from API until we have enough animals
+				while (fetchedAnimals.length < 8 && retries < maxRetries) {
+					const response = await axios.get(
+						`http://localhost:8888/.netlify/functions/getPetfinderAnimals?type=${type}&sort=${sort}&limit=${limit}`,
+					);
+
+					const filteredAnimals = response.data.animals.filter(
+						(animal) => animal.photos.length > 0 && animal.name.length < 20, // Adjust the length condition as needed
+					);
+
+					fetchedAnimals = fetchedAnimals.concat(filteredAnimals);
+
+					retries++;
+
+					if (retries === maxRetries) alert('Could not fetch enough animals!');
+				}
+
+				// Transform data to lowercase
+				const transformedAnimals = fetchedAnimals.slice(0, cards).map((animal) => ({
+					...animal,
+					name: animal.name.toLowerCase(),
+					contact: {
+						...animal.contact,
+						address: {
+							...animal.contact.address,
+							city: animal.contact.address.city.toLowerCase(),
+						},
+					},
+				}));
+
+				setAnimals(transformedAnimals);
+			} catch (error) {
+				console.error('Error fetching animals:', error);
+				alert('Error fetching animals', error);
+			}
+		};
+
+		fetchAnimals();
+		resetGame();
+	}, [animalType]);
+
+	// Shuffle cards when isFlipped changes
+	useEffect(() => {
+		const shuffledAnimals = [...animals];
+		for (let i = shuffledAnimals.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[shuffledAnimals[i], shuffledAnimals[j]] = [shuffledAnimals[j], shuffledAnimals[i]];
+		}
+		setAnimals(shuffledAnimals);
+		setIsFlipped(false);
+	}, [isFlipped]);
+
+	const handleCardClick = (key) => {
+		if (clickedCards.includes(key)) {
+			// Game over
+			setGameStatus('lost');
+			return;
+		} else if (score === animals.length - 1) {
+			// Won game
+			setGameStatus('won');
+			return;
+		}
+		// Flip card and update clicked cards
+		setIsFlipped(!isFlipped);
+		setClickedCards((prevClickedCards) => [...prevClickedCards, key]);
+		setScore(score + 1);
+	};
+
+	function resetGame() {
+		setScore(0);
+		setClickedCards([]);
+		setGameStatus('playing');
+	}
+
 	return (
-		<div>
-			<h1 className="font-bold">Memory Card</h1>
+		<div className="flex h-screen flex-col items-center justify-center p-6">
+			<h1 className="mb-8 text-4xl font-bold text-white">Petfinder Memory Game</h1>
+			{gameStatus === 'won' && (
+				<h2 className="mb-8 text-2xl font-bold text-white">Game Over! You Win!</h2>
+			)}
+			{gameStatus === 'lost' && (
+				<h2 className="mb-8 text-2xl font-bold text-white">
+					Game Over! You lost! Final Score: {score}
+				</h2>
+			)}
+			{gameStatus === 'playing' && (
+				<h2 className="mb-8 text-2xl font-bold text-white">Current Score: {score}</h2>
+			)}
+			<select
+				id="type"
+				name="type"
+				value={animalType} // Set the value of select to the animalType state
+				onChange={(e) => setAnimalType(e.target.value)} // Update the animalType state on change
+				className="mb-8 rounded-lg bg-white text-black"
+			>
+				<option value="dog">Dogs</option>
+				<option value="cat">Cats</option>
+				<option value="rabbit">Rabbits</option>
+				<option value="small-furry">Small & Furry</option>
+				<option value="horse">Horses</option>
+				<option value="bird">Birds</option>
+				<option value="scales-fins-other">Scales, Fins & Other</option>
+				<option value="barnyard">Barnyard</option>
+			</select>
+			<div className="grid h-[75vh] w-[1000px] grid-flow-row grid-cols-4 grid-rows-2 gap-8">
+				{animals.map((animal) => (
+					<Card
+						key={animal.id}
+						animal={animal}
+						gameStatus={gameStatus}
+						isFlipped={isFlipped}
+						setIsFlipped={setIsFlipped}
+						onCardClick={() => handleCardClick(animal.id)}
+					/>
+				))}
+			</div>
 		</div>
 	);
-}
+};
 
 export default App;
