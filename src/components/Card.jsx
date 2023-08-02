@@ -17,7 +17,7 @@ const Card = ({ animal, gameStatus, isFlipped, onCardClick }) => {
 	return (
 		<div className="card relative transition-all ease-in-out md:hover:scale-105">
 			{/* Card Front */}
-			<div
+			<button
 				className={`card-front group relative h-full w-full overflow-hidden ${
 					isFlipped ? 'hidden' : 'flex'
 				}`}
@@ -56,7 +56,7 @@ const Card = ({ animal, gameStatus, isFlipped, onCardClick }) => {
 				</button>
 				{/* Gradient Overlay */}
 				<div className="pointer-events-none absolute left-0 top-0 flex h-full w-full rounded-xl border-2 border-white bg-gradient-to-b  from-transparent to-black md:border-4"></div>
-			</div>
+			</button>
 			{/* Card Back */}
 			<div
 				className={`pointer-events-none absolute left-0 top-0 z-20 ${
