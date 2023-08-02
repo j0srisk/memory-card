@@ -27,7 +27,7 @@ const Card = ({ animal, gameStatus, isFlipped, onCardClick }) => {
 					style={{
 						backgroundImage: `url(${animal.photos[0].full})`,
 					}}
-					className="flex h-full w-full flex-col justify-end rounded-xl bg-cover bg-center p-4 text-center"
+					className="flex h-full w-full flex-col justify-end rounded-xl bg-gray-300 bg-cover bg-center p-4 text-center"
 				>
 					<div className="z-10 flex select-none flex-col items-center text-white">
 						<p className="text-xl font-bold capitalize md:text-2xl">{animal.name}</p>

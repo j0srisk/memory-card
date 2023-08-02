@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import Card from './components/Card';
+import SkeletonCard from './components/CardSkeleton';
 
 const App = () => {
 	const [animals, setAnimals] = useState([]);
@@ -10,16 +11,19 @@ const App = () => {
 	const [score, setScore] = useState(0);
 	const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'won', 'lost'
 	const [animalType, setAnimalType] = useState('dog'); // 'dog', 'cat', 'rabbit', 'small-furry', 'horse', 'bird', 'scales-fins-other', 'barnyard'
+	const [isLoading, setIsLoading] = useState(true);
+
+	const cards = 6;
 
 	useEffect(() => {
 		// Function to fetch data from your API
+		setIsLoading(true);
+
 		const fetchAnimals = async () => {
 			try {
 				const type = animalType;
 				const sort = 'random';
 				const limit = 20;
-
-				const cards = 6;
 
 				const maxRetries = 3;
 				let retries = 0;
@@ -64,6 +68,7 @@ const App = () => {
 				console.error('Error fetching animals:', error);
 				alert('Error fetching animals', error);
 			}
+			setIsLoading(false);
 		};
 
 		fetchAnimals();
@@ -159,16 +164,18 @@ const App = () => {
 				</div>
 			</div>
 			<div className="grid h-full w-full max-w-screen-lg grid-flow-row grid-cols-3 grid-rows-2 gap-4 lg:gap-8">
-				{animals.map((animal) => (
-					<Card
-						key={animal.id}
-						animal={animal}
-						gameStatus={gameStatus}
-						isFlipped={isFlipped}
-						setIsFlipped={setIsFlipped}
-						onCardClick={() => handleCardClick(animal)}
-					/>
-				))}
+				{isLoading
+					? [...Array(cards)].map((_, i) => <SkeletonCard key={i} />)
+					: animals.map((animal) => (
+							<Card
+								key={animal.id}
+								animal={animal}
+								gameStatus={gameStatus}
+								isFlipped={isFlipped}
+								setIsFlipped={setIsFlipped}
+								onCardClick={() => handleCardClick(animal)}
+							/>
+					  ))}
 			</div>
 		</div>
 	);
