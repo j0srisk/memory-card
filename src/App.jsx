@@ -105,11 +105,11 @@ const App = () => {
 	}
 
 	return (
-		<div className="flex h-screen flex-col items-center justify-between p-6">
-			<div className="flex w-full max-w-screen-xl flex-col ">
+		<div className="flex h-screen flex-col items-center justify-between gap-4 p-4 md:gap-8 md:p-8">
+			<div className="flex w-full max-w-screen-lg flex-col">
 				<div className="flex w-full justify-between">
 					<div className="">
-						<h1 className="text-4xl font-bold text-white">Petfinder Memory Game</h1>
+						<h1 className="text-2xl font-bold text-white lg:text-4xl">Petfinder Memory Game</h1>
 					</div>
 					<div className="relative inline-block w-48">
 						<select
@@ -117,7 +117,7 @@ const App = () => {
 							name="type"
 							value={animalType} // Set the value of select to the animalType state
 							onChange={(e) => setAnimalType(e.target.value)} // Update the animalType state on change
-							className="block w-full appearance-none rounded-lg border border-gray-300 bg-white px-4 py-2 font-bold focus:border-indigo-500 focus:outline-none"
+							className="block h-full w-full appearance-none rounded-lg border border-gray-300 bg-white px-2 py-1 font-bold focus:border-indigo-500 focus:outline-none"
 						>
 							<option value="dog">Dogs</option>
 							<option value="cat">Cats</option>
@@ -144,21 +144,21 @@ const App = () => {
 				<div className="w-full justify-start">
 					{gameStatus === 'won' && <h2 className="mb-8 text-lg text-white">Game Over! You Win!</h2>}
 					{gameStatus === 'lost' && (
-						<h2 className="mb-8 text-lg text-white">
+						<h2 className="text-md text-white lg:text-lg">
 							Game Over! You already selected that card. Final Score: {score}
 						</h2>
 					)}
 					{gameStatus === 'playing' && score > 0 && (
-						<h2 className="mb-8 text-lg text-white">Current Score: {score}</h2>
+						<h2 className="text-md text-white lg:text-lg">Current Score: {score}</h2>
 					)}
 					{gameStatus === 'playing' && score === 0 && (
-						<h2 className="mb-8 text-lg text-white">
+						<h2 className="text-md text-white lg:text-lg">
 							Click a card to start and earn points, but don&apos;t click on any more than once!
 						</h2>
 					)}
 				</div>
 			</div>
-			<div className="grid h-full w-full max-w-screen-xl grid-flow-row grid-cols-3 grid-rows-2 gap-8">
+			<div className="grid h-full w-full max-w-screen-lg grid-flow-row grid-cols-3 grid-rows-2 gap-4 lg:gap-8">
 				{animals.map((animal) => (
 					<Card
 						key={animal.id}

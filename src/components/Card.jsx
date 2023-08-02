@@ -15,7 +15,7 @@ const Card = ({ animal, gameStatus, isFlipped, onCardClick }) => {
 	};
 
 	return (
-		<div className="card relative transition-all ease-in-out hover:scale-105">
+		<div className="card relative transition-all ease-in-out md:hover:scale-105">
 			{/* Card Front */}
 			<div
 				className={`card-front group relative h-full w-full overflow-hidden ${
@@ -30,8 +30,8 @@ const Card = ({ animal, gameStatus, isFlipped, onCardClick }) => {
 					className="flex h-full w-full flex-col justify-end rounded-xl bg-cover bg-center p-4 text-center"
 				>
 					<div className="z-10 flex select-none flex-col items-center text-white">
-						<p className="text-2xl font-bold capitalize">{animal.name}</p>
-						<p className="text-sm capitalize">
+						<p className="text-xl font-bold capitalize md:text-2xl">{animal.name}</p>
+						<p className="text-xs capitalize md:text-sm">
 							{animal.contact.address.city}, {animal.contact.address.state}
 						</p>
 					</div>
@@ -39,7 +39,7 @@ const Card = ({ animal, gameStatus, isFlipped, onCardClick }) => {
 				<button
 					data-animal-url={animal.url}
 					onClick={handleButtonClick}
-					className="absolute right-4 top-4 z-10 hidden group-hover:block"
+					className="absolute right-2 top-2 z-10 hidden group-hover:block md:right-4 md:top-4"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -55,13 +55,13 @@ const Card = ({ animal, gameStatus, isFlipped, onCardClick }) => {
 					</svg>
 				</button>
 				{/* Gradient Overlay */}
-				<div className="pointer-events-none absolute left-0 top-0 flex h-full w-full rounded-xl border-4 border-white  bg-gradient-to-b from-transparent to-black"></div>
+				<div className="pointer-events-none absolute left-0 top-0 flex h-full w-full rounded-xl border-2 border-white bg-gradient-to-b  from-transparent to-black md:border-4"></div>
 			</div>
 			{/* Card Back */}
 			<div
 				className={`pointer-events-none absolute left-0 top-0 z-20 ${
 					isFlipped ? 'flex' : 'hidden'
-				} h-full w-full items-center justify-center rounded-xl border-4 border-white  bg-gray-300`}
+				} h-full w-full items-center justify-center rounded-xl border-2 border-white bg-gray-300  md:border-4`}
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
