@@ -110,7 +110,7 @@ const App = () => {
 	}
 
 	return (
-		<div className="flex h-screen flex-col items-center justify-between gap-4 p-4 md:gap-8 md:p-8">
+		<div className="flex h-[100dvh] flex-col items-center justify-between gap-4 p-4 md:gap-8 md:p-8">
 			<div className="flex w-full max-w-screen-lg flex-col">
 				<div className="flex w-full justify-between">
 					<div className="">
